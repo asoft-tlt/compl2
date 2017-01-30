@@ -1,0 +1,350 @@
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">	
+		<link rel="stylesheet" href="css/style.css">
+		<script type="text/javascript" src="http://code.jquery.com/jquery-3.1.0.min.js"></script>
+		<script type="text/javascript" src="js/jquery.touchSwipe.min.js"></script>
+		<script type="text/javascript" src="js/libgif.js"></script>
+		<script type="text/javascript" src="js/rubbable.js"></script>
+		<script type="text/javascript" src="js/clipboard.js"></script>
+
+		<script id='code_1'>
+		        var IMG_WIDTH = 380; //375
+		        var currentImg = 0;
+		        var maxImages = 38;
+		        var cards;
+			var favor;
+			var speed = 300;
+			var videoon = 0;		        
+			var timer;
+			var sup;
+			var swipeOptions = {
+				triggerOnTouchEnd: true,
+				swipeStatus: swipeStatus,
+				allowPageScroll: "vertical",
+				threshold: 75
+			};
+			var swipeOptions2 = {
+				triggerOnTouchEnd: true,
+				swipeStatus: swipeStatus2,
+				allowPageScroll: "vertical",
+				threshold: 75
+			};
+
+			$(function () {  
+				cards = $("#cards");
+				favor = $("#favorites");
+				content = $("#content");
+				cards.swipe(swipeOptions);
+				favor.swipe(swipeOptions2);
+			});
+
+			function swipeStatus(event, phase, direction, distance) {
+				if (phase == "move" && (direction == "left" || direction == "right" || direction == "up" || direction == "down")) {
+					var duration = 0;
+
+                			if (direction == "left") {
+                    				if (currentImg != maxImages-1) {
+                    					scrollImages((IMG_WIDTH * currentImg) + distance, duration); 
+						}
+               				} else if (direction == "right") {
+               					if (currentImg != 0) {
+				                    scrollImages((IMG_WIDTH * currentImg) - distance, duration);
+						}
+               				} else if (direction == "up") {
+               					if (favorites == 0) {
+				                    scrollImages2(675 - distance, duration);
+						}
+               				} 
+
+
+			        } else if (phase == "cancel") {
+			                scrollImages(IMG_WIDTH * currentImg, speed);
+			        } else if (phase == "end") {
+			                if (direction == "right") {
+			                    previousImage();
+			                } else if (direction == "left") {
+  			                    nextImage();
+			                } else if (direction == "up") {
+  			                    tofav();
+			                }
+			        }
+			 }
+
+			function swipeStatus2(event, phase, direction, distance) {          
+				if (phase == "move" && (direction == "down")) {
+					var duration = 0;
+               				if (direction == "down") {
+               					if (favorites == 1) {
+				                    scrollImages2(0 - distance, duration);
+						}
+               				} 
+
+			        } else if (phase == "cancel") {
+			                scrollImages2(0, speed);
+			        } else if (phase == "end") {
+			                if (direction == "down") {
+			                    tomain();
+			                }
+			        }
+			 }
+
+
+
+
+			function previousImage() {
+				currentImg = Math.max(currentImg - 1, 0);
+				scrollImages(IMG_WIDTH * currentImg, speed);
+			}
+
+
+			function nextImage() {
+				if(currentImg != maxImages-1) {
+              				currentImg = Math.min(currentImg + 1, maxImages - 1);
+			                scrollImages(IMG_WIDTH * currentImg, speed);
+			        } 
+		        }
+
+			function scrollImages(distance, duration) {
+				cards.css("-webkit-transition-duration", (duration / 1000).toFixed(1) + "s");
+
+				//inverse the number we set in the css
+            			var value = (distance < 0 ? "" : "-") + Math.abs(distance).toString();
+			        cards.css("-webkit-transform", "translate3d(" + value + "px,0,0)");
+		        }
+
+			function scrollImages2(distance, duration) {
+				content.css("-webkit-transition-duration", (duration / 1000).toFixed(1) + "s");
+
+				//inverse the number we set in the css
+            			var value = (distance < 0 ? "" : "-") + Math.abs(distance).toString();
+			        content.css("-webkit-transform", "translate3d(0," + value + "px,0)");
+		        }
+
+			function tofav() {
+			                scrollImages2(675, speed);
+					favorites = 1;
+		        }
+
+			function tomain() {
+			                scrollImages2(0, speed);
+                                        favorites = 0;
+		        }
+
+
+
+
+
+		</script>
+	<style>
+		.gif img {max-height:100%;max-width:100%;}
+	</style>
+	</head>
+	<body>
+		<div id="content" >
+			<div id="cards">
+				<div class="card" id="1" style="position:relative;" data-clipboard-text="Да все ок">
+					<div class="gif" style="position:absolute;top:-30;right:-25;width:170px;height:303px;z-index:2;"> <img src="http://savvy-club.com/2/video/1R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:25px;left:-25;width:170px;height:303px;z-index:2;"> <img src="http://savvy-club.com/2/video/1L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/1.png);background-size:100%;"></div>
+				</div>
+				<div class="card" id="2" style="position:relative;">
+					<div class="gif" style="position:absolute;top:25px;right:25px;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/2R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:20px;left:25px;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/2L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/2.png);background-size:100%;"></div>
+				</div>
+				<div class="card" id="3" style="position:relative;">
+					<div class="gif" style="position:absolute;top:-45px;right:-20px;width:170px;height:303px;z-index:2;"> <img src="http://savvy-club.com/2/video/3R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:-5px;left:-35px;width:170px;height:303px;z-index:2;"> <img src="http://savvy-club.com/2/video/3L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/3.png);background-size:100%;"></div>
+				</div>
+				<div class="card" id="4" style="position:relative;">
+					<div class="gif" style="position:absolute;top:15;right:-15;width:170px;height:303px;z-index:2;"> <img src="http://savvy-club.com/2/video/4R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:-30px;left:0;width:170px;height:303px;z-index:2;"> <img src="http://savvy-club.com/2/video/4L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/4.png);background-size:100%;"></div>
+				</div>
+				<div class="card" id="5" style="position:relative;">
+					<div class="gif" style="position:absolute;top:15;right:0;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/5R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:25px;left:0;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/5L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/5.png);background-size:100%;"></div>
+				</div>
+				<div class="card" id="6" style="position:relative;">
+					<div class="gif" style="position:absolute;top:0;right:20px;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/6R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:20px;left:15px;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/6L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/6.png);background-size:100%;"></div>
+				</div>
+				<div class="card" id="7" style="position:relative;">
+					<div class="gif" style="position:absolute;top:-35;right:-25px;width:190px;height:339px;z-index:2;"> <img src="http://savvy-club.com/2/video/7R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:-20px;left:-10px;width:190px;height:339px;z-index:2;"> <img src="http://savvy-club.com/2/video/7L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/7.png);background-size:100%;"></div>
+				</div>
+				<div class="card" id="8" style="position:relative;">
+					<div class="gif" style="position:absolute;top:0;right:-15;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/8R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:20px;left:5px;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/8L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/8.png);background-size:100%;"></div>
+				</div>
+				<div class="card" id="9" style="position:relative;">
+					<div class="gif" style="position:absolute;top:5;right:6px;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/9R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:5px;left:0;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/9L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/9.png);background-size:100%;"></div>
+				</div>
+				<div class="card" id="10" style="position:relative;">
+					<div class="gif" style="position:absolute;top:-10;right:15px;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/10R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:20px;left:10;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/10L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/10.png);background-size:100%;"></div>
+				</div>
+				<div class="card" id="11" style="position:relative;">
+					<div class="gif" style="position:absolute;top:-20px;right:20px;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/11R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:0px;left:20px;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/11L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/11.png);background-size:100%;"></div>
+				</div>
+				<div class="card" id="12" style="position:relative;">
+					<div class="gif" style="position:absolute;top:-60px;right:0px;width:170px;height:303px;z-index:2;"> <img src="http://savvy-club.com/2/video/12R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:0px;left:-5px;width:170px;height:303px;z-index:2;"> <img src="http://savvy-club.com/2/video/12L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/12.png);background-size:100%;"></div>
+				</div>
+				<div class="card" id="13" style="position:relative;">
+					<div class="gif" style="position:absolute;top:25;right:10px;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/13R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:0px;left:10px;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/13L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/13.png);background-size:100%;"></div>
+				</div>
+				<div class="card" id="14" style="position:relative;">
+					<div class="gif" style="position:absolute;top:10;right:-10;width:170px;height:303px;z-index:2;"> <img src="http://savvy-club.com/2/video/14R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:-25px;left:-15;width:170px;height:303px;z-index:2;"> <img src="http://savvy-club.com/2/video/14L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/14.png);background-size:100%;"></div>
+				</div>
+				<div class="card" id="15" style="position:relative;">
+					<div class="gif" style="position:absolute;top:0;right:-20px;width:190px;height:339px;z-index:2;"> <img src="http://savvy-club.com/2/video/15R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:-30px;left:-10px;width:190px;height:339px;z-index:2;"> <img src="http://savvy-club.com/2/video/15L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/15.png);background-size:100%;"></div>
+				</div>
+				<div class="card" id="16" style="position:relative;">
+					<div class="gif" style="position:absolute;top:-30;right:5px;width:170px;height:303px;z-index:2;"> <img src="http://savvy-club.com/2/video/16R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:10px;left:20px;width:170px;height:303px;z-index:2;"> <img src="http://savvy-club.com/2/video/16L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/16.png);background-size:100%;"></div>
+				</div>
+				<div class="card" id="17" style="position:relative;">
+					<div class="gif" style="position:absolute;top:15px;right:-10;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/17R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:10px;left:0;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/17L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/17.png);background-size:100%;"></div>
+				</div>
+				<div class="card" id="18" style="position:relative;">
+					<div class="gif" style="position:absolute;top:10;right:0px;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/18R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:0px;left:15px;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/18L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/18.png);background-size:100%;"></div>
+				</div>
+				<div class="card" id="19" style="position:relative;">
+					<div class="gif" style="position:absolute;top:10px;right:0px;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/19R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:10px;left:10px;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/19L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/19.png);background-size:100%;"></div>
+				</div>
+				<div class="card" id="20" style="position:relative;">
+					<div class="gif" style="position:absolute;top:15px;right:-15;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/20R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:20px;left:-7;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/20L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/20.png);background-size:100%;"></div>
+				</div>
+                <div class="card" id="21" style="position:relative;">
+					<div class="gif" style="position:absolute;top:-20px;right:-20;width:170px;height:303px;z-index:2;"> <img src="http://savvy-club.com/2/video/21R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:-40px;left:-10px;width:170px;height:303px;z-index:2;"> <img src="http://savvy-club.com/2/video/21L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/21.png);background-size:100%;"></div>
+				</div>
+                <div class="card" id="22" style="position:relative;">
+					<div class="gif" style="position:absolute;top:0px;right:5px;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/22R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:10px;left:0px;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/22L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/22.png);background-size:100%;"></div>
+				</div>
+                <div class="card" id="23" style="position:relative;">
+					<div class="gif" style="position:absolute;top:-25;right:10px;width:170px;height:303px;z-index:2;"> <img src="http://savvy-club.com/2/video/23R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:-45px;left:10px;width:170px;height:303px;z-index:2;"> <img src="http://savvy-club.com/2/video/23L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/23.png);background-size:100%;"></div>
+				</div>
+                <div class="card" id="24" style="position:relative;">
+					<div class="gif" style="position:absolute;top:-15;right:0px;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/24R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:0px;left:20px;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/24L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/24.png);background-size:100%;"></div>
+				</div>
+                <div class="card" id="25" style="position:relative;">
+					<div class="gif" style="position:absolute;top:10;right:0;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/25R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:20px;left:0;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/25L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/25.png);background-size:100%;"></div>
+				</div>
+                <div class="card" id="26" style="position:relative;">
+					<div class="gif" style="position:absolute;top:10px;right:0px;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/26R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:25px;left:10px;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/26L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/26.png);background-size:100%;"></div>
+				</div>
+                <div class="card" id="27" style="position:relative;">
+					<div class="gif" style="position:absolute;top:10px;right:10px;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/27R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:15px;left:10px;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/27L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/27.png);background-size:100%;"></div>
+				</div>
+                <div class="card" id="28" style="position:relative;">
+					<div class="gif" style="position:absolute;top:-20px;right:-10px;width:170px;height:303px;z-index:2;"> <img src="http://savvy-club.com/2/video/28R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:-40px;left:-10px;width:170px;height:303px;z-index:2;"> <img src="http://savvy-club.com/2/video/28L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/28.png);background-size:100%;"></div>
+				</div>
+                <div class="card" id="29" style="position:relative;">
+					<div class="gif" style="position:absolute;top:10px;right:0;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/29R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:20px;left:-15;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/29L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/29.png);background-size:100%;"></div>
+				</div>
+                <div class="card" id="30" style="position:relative;">
+					<div class="gif" style="position:absolute;top:0;right:0;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/30R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:10px;left:0;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/30L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/30.png);background-size:100%;"></div>
+				</div>
+                <div class="card" id="31" style="position:relative;">
+					<div class="gif" style="position:absolute;top:0;right:-5;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/31R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:20px;left:-15;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/31L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/31.png);background-size:100%;"></div>
+				</div>
+                <div class="card" id="32" style="position:relative;">
+					<div class="gif" style="position:absolute;top:50px;right:20px;width:100px;height:178px;z-index:2;"> <img src="http://savvy-club.com/2/video/32R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:25px;left:10px;width:100px;height:178px;z-index:2;"> <img src="http://savvy-club.com/2/video/32L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/32.png);background-size:100%;"></div>
+				</div>
+                <div class="card" id="33" style="position:relative;">
+					<div class="gif" style="position:absolute;top:15;right:0;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/33R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:20px;left:-5px;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/33L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/33.png);background-size:100%;"></div>
+				</div>
+                <div class="card" id="34" style="position:relative;">
+					<div class="gif" style="position:absolute;top:25px;right:25px;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/2R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:20px;left:25px;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/2L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/34.png);background-size:100%;"></div>
+				</div>
+                <div class="card" id="35" style="position:relative;">
+					<div class="gif" style="position:absolute;top:-45px;right:-20px;width:170px;height:303px;z-index:2;"> <img src="http://savvy-club.com/2/video/3R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:-5px;left:-35px;width:170px;height:303px;z-index:2;"> <img src="http://savvy-club.com/2/video/3L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/35.png);background-size:100%;"></div>
+				</div>
+                <div class="card" id="36" style="position:relative;">
+					<div class="gif" style="position:absolute;top:15;right:-15;width:170px;height:303px;z-index:2;"> <img src="http://savvy-club.com/2/video/4R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:-30px;left:0;width:170px;height:303px;z-index:2;"> <img src="http://savvy-club.com/2/video/4L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/36.png);background-size:100%;"></div>
+				</div>
+                <div class="card" id="37" style="position:relative;">
+					<div class="gif" style="position:absolute;top:15;right:0;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/5R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:25px;left:0;width:140px;height:250px;z-index:2;"> <img src="http://savvy-club.com/2/video/5L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/37.png);background-size:100%;"></div>
+				</div>
+		                <div class="card" id="38" style="position:relative;">
+					<div class="gif" style="position:absolute;top:0;right:20px;width:111px;height:198px;z-index:2;"> <img src="http://savvy-club.com/2/video/6R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:20px;left:15px;width:111px;height:198px;z-index:2;"> <img src="http://savvy-club.com/2/video/6L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/39.png);background-size:100%;"></div>
+				</div>
+			</div>
+			<div id="favorites">
+		                <div class="card" id="38" style="position:relative;">
+					<div class="gif" style="position:absolute;top:0;right:20px;width:111px;height:198px;z-index:2;"> <img src="http://savvy-club.com/2/video/6R.gif" loop /> </div>
+					<div class="gif" style="position:absolute;bottom:20px;left:15px;width:111px;height:198px;z-index:2;"> <img src="http://savvy-club.com/2/video/6L.gif" loop /> </div>
+					<div style="position:absolute;top:10px;bottom:0;left:0;right:0;;z-index:3;background-image:url(imgs/cards/39.png);background-size:100%;"></div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			new Clipboard('.card');
+		</script>
+	</body>
+</html>
